@@ -2,7 +2,8 @@ const express   = require('express'); // import express js
 const mongoose  = require('mongoose'); // import mongoose db package
 require('./config') // import config file
 
-const User = require('./users');
+const User  = require('./users');
+// const Login = require('./login');
 const app = express();
 
 app.use(express.json());
@@ -35,6 +36,13 @@ app.post('/create', async (req,resp)=>{
         resp.status(400).send({status:400,message:"Request is empty!"}); 
         
     }
+});
+
+//create login api
+
+app.get('/login', async (req,resp)=>{
+    const email = new User.findOne({email:req.body.email})
+   console.log(User);
 });
 
 app.listen(5000);
