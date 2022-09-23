@@ -1,49 +1,18 @@
-const express   = require('express'); // import express js
-const mongoose  = require('mongoose'); // import mongoose db package
-require('./config') // import config file
+const express   = require('express');
+const mongooose = require('mongoose');
+const bcrypt    = require('bcrypt');
+const app       = express();
+const authRoute = require('./routes/auth')
 
-const User  = require('./users');
-// const Login = require('./login');
-const app = express();
 
+const dbURI = "mongodb://localhost:27017/authentication";
 app.use(express.json());
+app.use('/api/auth',authRoute)
 
-//post API for create user
-app.post('/create', async (req,resp)=>{
-    let data = new User(req.body);
-    // console.log(userData);
-    if(data != ''){
-        const userData = await User.find({"email" : req.body.email})
-        if(userData == ''){
-            if(data.first_name == ''){
-                resp.status(400).send({status:400,message:"Firstname is Empty!"}); 
-            } else if(data.last_name == ''){
-                resp.status(400).send({status:400,message:"Lastname is Empty!"}); 
-            } else if(data.phone_number == ''){
-                resp.status(400).send({status:400,message:"Phone Number is Empty!"}); 
-            } else if(data.email == ''){
-                resp.status(400).send({status:400,message:"Email is Empty!"}); 
-            } else if(data.password == ''){
-                resp.status(400).send({status:400,message:"Password is Empty!"}); 
-            } else {
-                let result  = await data.save();
-                resp.status(200).send({status:200,message:"Registration Successfully",data:result});
-            }
-        } else {
-            resp.status(400).send({status:400,message:"Email already exist!"});  
-        }
-    } else {
-        resp.status(400).send({status:400,message:"Request is empty!"}); 
-        
-    }
-});
+mongooose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology:true})
+const db = mongooose.connection
 
-//create login api
+db.on("error", (err) => {console.error(err)})
+db.once("open", () => {console.log("DB Started successfully")});
 
-app.get('/login', async (req,resp)=>{
-    const email = new User.findOne({email:req.body.email})
-   console.log(User);
-});
-
-app.listen(5000);
-
+app.listen(2400, ()=> {console.log("Server started: 2400")})
