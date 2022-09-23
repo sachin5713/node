@@ -30,6 +30,7 @@ router.get('/jwt-test',middleware.verify, (req, res) => {
     res.status(200).json(req.user);
 });
 
+
 router.post('/signup', (req, res) => {
     User.findOne({email: req.body.email})
     .then(user => {

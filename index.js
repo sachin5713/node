@@ -9,6 +9,7 @@ const dbURI = "mongodb://localhost:27017/authentication";
 app.use(express.json());
 app.use('/api/auth',authRoute)
 
+
 mongooose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology:true})
 const db = mongooose.connection
 
